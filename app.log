@@ -1,0 +1,15 @@
+2024-08-12T14:33:53.961Z [31merror[39m: Error fetching orders: PrismaClientKnownRequestError: 
+Invalid `prisma.order.findMany()` invocation:
+
+
+The table `public.Order` does not exist in the current database.
+2024-08-12T14:45:11.653Z [31merror[39m: Error fetching orders: PrismaClientKnownRequestError: 
+Invalid `prisma.order.findMany()` invocation:
+
+
+The table `public.Order` does not exist in the current database.
+2024-08-12T14:45:49.648Z [31merror[39m: Error fetching orders: PrismaClientKnownRequestError: 
+Invalid `prisma.order.findMany()` invocation:
+
+
+The column `order.primaryPhone` does not exist in the current database.

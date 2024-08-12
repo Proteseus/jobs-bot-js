@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // adjust this based on your actual database
+  url      = env("DATABASE_URL")
+}
+
+model Order {
+  id          String   @id @default(uuid())
+  userid      String   @db.VarChar(100)
+  username    String   @db.VarChar(100)
+  name        String   @db.VarChar(100)
+  primaryPhone BigInt
+  description String   @db.VarChar(255)
+  timeline    String   @db.VarChar(20)
+  budget      String   @db.VarChar(20)
+  Trackable   Trackable[]
+}
+
+model Trackable {
+  id       String   @id @default(uuid())
+  orderId  String   @db.VarChar(255)
+  date     DateTime @default(now())
+  status   StatusEnum
+  Order    Order    @relation(fields: [orderId], references: [id])
+
+  @@index([orderId])
+}
+
+model Client {
+  id          String @id @default(uuid())
+  name        String
+  phoneNumber BigInt
+}
+
+enum StatusEnum {
+  active
+  inactive
+}
+
