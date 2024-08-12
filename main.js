@@ -56,20 +56,13 @@ choiceScene.enter('text', async (ctx) => {
 
     if (text === 'Known Project') {
         await ctx.reply('You selected "Known Project". Please provide details about the project:');
-        ctx.scene.enter('PROJECT_DETAILS_SCENE');
     } else if (text === 'Unknown Project') {
         await ctx.reply('You selected "Unknown Project". Please provide a description of your vision:');
-        ctx.scene.enter('VISION_SCENE');
     } else if (text === 'Previous Works') {
         await ctx.reply('You selected "Previous Works". Here are some of our previous works: [Link to works]');
     } else {
         await ctx.reply('Please choose one of the options provided.');
     }
-});
-
-choiceScene.on(async (ctx) => {
-    await ctx.reply("Provide a brief description of the project you wish to undertake:", Markup.removeKeyboard());
-    ctx.scene.state.choice = ctx.message.text;
 });
 
 choiceScene.on('text', async (ctx) => {
