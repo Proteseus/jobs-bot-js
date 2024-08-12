@@ -48,6 +48,25 @@ Previous works to see previous works`,
     }
 });
 
+// Handle button presses
+bot.hears('Known Project', async (ctx) => {
+    await ctx.reply('You chose Known Project. Please provide details about the project.');
+    // Start conversation by setting a state or flag
+    ctx.session.conversation = 'known_project';
+});
+
+bot.hears('Unknown Project', async (ctx) => {
+    await ctx.reply('You chose Unknown Project. Please describe your vision.');
+    // Start conversation by setting a state or flag
+    ctx.session.conversation = 'unknown_project';
+});
+
+bot.hears('Previous Works', async (ctx) => {
+    await ctx.reply('You chose Previous Works. What would you like to know?');
+    // Start conversation by setting a state or flag
+    ctx.session.conversation = 'previous_works';
+});
+
 // Create scenes for the conversation
 const choiceScene = new Scenes.BaseScene('CHOICE_SCENE');
 choiceScene.enter(async (ctx) => {
