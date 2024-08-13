@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 
 import dotenv from 'dotenv';
-import logger from './logger.js'; // Assuming you have a logger module set up
+import logger from './logger.js';
 
 dotenv.config();
 
@@ -27,8 +27,12 @@ export async function createClientEntry(name, primaryPhone) {
 // Creating a project order in the database
 export async function createProjectOrder(userid, username, name, primaryPhone, description, timeline, budget) {
     try {
+        // Generate a 6-digit order ID
+        const orderId = ('000000' + Math.floor(Math.random() * 999999)).slice(-6);
+
         const order = await prisma.order.create({
             data: {
+                id: orderId,
                 userid: userid,
                 username: username,
                 name: name,
@@ -52,7 +56,7 @@ export async function fetchOrders() {
         const orders = await prisma.order.findMany();
         const formattedOrders = orders.map(order => ({
             id: order.id,
-            userid: order.userid,
+            userid: order.userid.toString(),
             username: order.username,
             name: order.name,
             primaryPhone: order.primaryPhone.toString(),
