@@ -80,15 +80,6 @@ bot.start((ctx) => {
             { command: 'generate_report_orders', description: 'Generate orders report' },
             { command: 'generate_report_all_orders', description: 'Generate all orders report' },
         ], { scope: { type: 'chat', chat_id: ctx.message.chat.id } });
-    ctx.reply(
-            `Pick where to proceed:
-New project if you have a set of requirements
-Previous works to see previous works`,
-                Markup.inlineKeyboard([
-                    Markup.button.callback("New Project", "newProject"),
-                    Markup.button.callback("Previous Works", "Previous Works")
-                ]).resize()
-        );
     } else {
         ctx.telegram.setMyCommands([
             { command: 'start', description: 'New project request' },
