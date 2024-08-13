@@ -8,14 +8,14 @@ datasource db {
 }
 
 model Order {
-  id          String   @id @default(uuid())
-  userid      String   @db.VarChar(100)
+  id          String   @id @default(cuid()) // Custom order ID
+  userid      BigInt
   username    String   @db.VarChar(100)
   name        String   @db.VarChar(100)
   primaryPhone BigInt
   description String   @db.VarChar(255)
   timeline    String   @db.VarChar(20)
-  budget      String   @db.VarChar(20)
+  budget      Float
   Trackable   Trackable[]
 }
 
