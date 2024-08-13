@@ -40,29 +40,20 @@ bot.start((ctx) => {
 Known project if you have a set of requirements
 Unknown project if you have a vision
 Previous works to see previous works`,
-            Markup.keyboard([
-                ["Known Project", "Unknown Project"],
-                ["Previous Works"]
-            ]).resize()
+                Markup.inlineKeyboard([
+                    Markup.button.callback("Known Project", "Known Project"),
+                    Markup.button.callback("Unknown Project", "Unknown Project"),
+                    Markup.button.callback("Previous Works", "Previous Works")
+                ]).resize()
         );
     }
 });
 
+bot.action('Known Project', async ctx => { stage.start() })
 // Create scenes for the conversation
 const choiceScene = new Scenes.BaseScene('CHOICE_SCENE');
-// Add handling for button presses in the 'choiceScene'
-choiceScene.enter('text', async (ctx) => {
-    const text = ctx.message.text;
-
-    if (text === 'Known Project') {
-        await ctx.reply('You selected "Known Project". Please provide details about the project:');
-    } else if (text === 'Unknown Project') {
-        await ctx.reply('You selected "Unknown Project". Please provide a description of your vision:');
-    } else if (text === 'Previous Works') {
-        await ctx.reply('You selected "Previous Works". Here are some of our previous works: [Link to works]');
-    } else {
-        await ctx.reply('Please choose one of the options provided.');
-    }
+choiceScene.enter(async (ctx) => {
+    await ctx.reply("Provide a brief description of the project you wish to undertake:");
 });
 
 choiceScene.on('text', async (ctx) => {
@@ -113,6 +104,7 @@ contactScene.on('contact', async (ctx) => {
 });
 
 const stage = new Scenes.Stage([choiceScene, budgetScene, timelineScene, contactScene]);
+bot.use(Telegraf.log());
 bot.use(session());
 bot.use(stage.middleware());
 
