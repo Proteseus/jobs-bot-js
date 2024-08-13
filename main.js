@@ -17,12 +17,13 @@ const USERID = process.env.USERID;
 // Create scenes for the conversation
 const choiceScene = new Scenes.BaseScene('CHOICE_SCENE');
 choiceScene.enter(async (ctx) => {
-    await ctx.reply("Provide a brief description of the project you wish to undertake:");
+    const message = await ctx.reply("Provide a brief description of the project you wish to undertake:");
+    ctx.session.messageId = message.message_id;
 });
 
 choiceScene.on('text', async (ctx) => {
     ctx.session.description = ctx.message.text;
-    await ctx.reply("Now please, if you have an estimated budget for the project, if not just put in a '-' and proceed:");
+    await ctx.editMessageText(ctx.chat.id, ctx.session.message_id, null, "Now please, if you have an estimated budget for the project, if not just put in a '-' and proceed:");
     ctx.scene.enter('BUDGET_SCENE');
 });
 
@@ -33,17 +34,17 @@ budgetScene.on('text', async (ctx) => {
 
     if (budgetRegex.test(budget)) {
         ctx.session.budget = parseFloat(budget.replace(/,/g, ''));
-        await ctx.reply("Now please, if you have an estimated time for the project, if not just put in a '-' and proceed:");
+        await ctx.editMessageText(ctx.chat.id, ctx.session.message_id, null, "Now please, if you have an estimated time for the project, if not just put in a '-' and proceed:");
         ctx.scene.enter('TIMELINE_SCENE');
     } else {
-        await ctx.reply("Please enter a valid number for the budget:");
+        await ctx.editMessageText(ctx.chat.id, ctx.session.message_id, null, "Please enter a valid number for the budget:");
     }
 });
 
 const timelineScene = new Scenes.BaseScene('TIMELINE_SCENE');
 timelineScene.on('text', async (ctx) => {
     ctx.session.timeline = ctx.message.text;
-    await ctx.reply("You will now be prompted to share your contact info:", Markup.keyboard([
+    await ctx.editMessageText(ctx.chat.id, ctx.session.message_id, null, "You will now be prompted to share your contact info:", Markup.keyboard([
         Markup.button.contactRequest("Share Contact")
     ]).resize());
     ctx.scene.enter('CONTACT_SCENE');
@@ -57,7 +58,7 @@ contactScene.on('contact', async (ctx) => {
 
     try {
         const projectTracker = await createProjectOrder(contact.user_id, ctx.message.chat.username, contact.first_name, contact.phone_number, state.description, state.timeline, state.budget);
-        await ctx.reply(`Thank you, your project request has been logged with number \`${projectTracker}\`. The developer will contact you shortly.\n Thank you for your patience`, { parse_mode: 'Markdown' });
+        await ctx.editMessageText(ctx.chat.id, ctx.session.message_id, null, `Thank you, your project request has been logged with number \`${projectTracker}\`. The developer will contact you shortly.\n Thank you for your patience`, { parse_mode: 'Markdown' });
         const message = `Order: #\`${projectTracker}\`\nName: ${contact.first_name}\nUser: \`@${ctx.message.chat.username}\`\nPhone: ${contact.phone_number}\nDetails: ${state.description}\nBudget: ${state.budget}\nTimeline: ${state.timeline}`;
         await bot.telegram.sendMessage(USERID, message, { parse_mode: 'Markdown' });
     } catch (error) {
@@ -71,6 +72,11 @@ const stage = new Scenes.Stage([choiceScene, budgetScene, timelineScene, contact
 bot.use(Telegraf.log());
 bot.use(session());
 bot.use(stage.middleware());
+bot.use((ctx, next) => {
+    if(!ctx.session.messageId) {
+        ctx.session.messageId = null;
+    }
+})
 
 // Define bot commands based on user role
 bot.start((ctx) => {
