@@ -124,6 +124,10 @@ bot.action('newProject', ctx => {
     ctx.scene.enter('CHOICE_SCENE');
 });
 
+bot.command('cancel', ctx => {
+    ctx.scene.leave();
+});
+
 // Error handling
 bot.catch((err, ctx) => {
     console.error(`Error for ${ctx.updateType}`, err);
