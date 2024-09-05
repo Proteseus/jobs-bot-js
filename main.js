@@ -136,10 +136,26 @@ bot.catch((err, ctx) => {
     ctx.reply('Sorry, an error occurred. Please try again.');
 });
 
-exports.jobsBot = functions.https.onRequest(async (req, res) => {
-    console.log(`Incoming message: ${req.body}`)
-    return await bot.handleUpdate(req.body, res).then((rv) => {
-        return !rv && res.sendStatus(200)
-    });
+// Start Express server
+app.get('/', (req, res) => {
+    res.json({ message: "Hello, welcome to the Jobs-Bot by t.me/Leviticus_98!" });
 });
+
+// Webhook handler route
+app.post('/jobsBot', (req, res) => {
+    // Handle the incoming update with Telegraf
+    bot.handleUpdate(req.body)
+        .then(() => res.sendStatus(200))  // Send OK status on success
+        .catch((err) => {
+            console.error('Error handling update:', err);
+            res.sendStatus(500); // Internal Server Error on failure
+        });
+});
+
+app.listen(8000, () => {
+    console.log('Express server running on port 8000');
+});
+
+// Start the bot for local
+// bot.launch();
 
