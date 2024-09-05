@@ -136,7 +136,8 @@ bot.catch((err, ctx) => {
     ctx.reply('Sorry, an error occurred. Please try again.');
 });
 
-// Start Express server
+// Start Express server 
+/*
 app.get('/', (req, res) => {
     res.json({ message: "Hello, welcome to the Jobs-Bot by t.me/Leviticus_98!" });
 });
@@ -144,11 +145,15 @@ app.get('/', (req, res) => {
 app.listen(8000, () => {
     console.log('Express server running on port 8000');
 });
+*/
 
 // Start the bot for local
 // bot.launch();
 bot.launch({
   webhook: {
     domain: 'https://jobs-bot-js.onrender.com',
+    port: process.env.PORT || 3000,
   },
+}).then(() => {
+        console.log("Webhoo listening on port", process.env.PORT)
 });
