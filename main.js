@@ -156,4 +156,8 @@ app.listen(8000, () => {
 
 // Start the bot for local
 // bot.launch();
-
+bot.launch({
+  webhook: {
+    domain: 'https://jobs-bot-js.onrender.com',
+  },
+});
