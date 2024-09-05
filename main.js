@@ -142,7 +142,7 @@ app.get('/', (req, res) => {
 });
 
 // Webhook handler route
-app.post('/jobsBot', (req, res) => {
+app.post('/', (req, res) => {
     // Handle the incoming update with Telegraf
     bot.handleUpdate(req.body)
         .then(() => res.sendStatus(200))  // Send OK status on success
