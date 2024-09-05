@@ -11,7 +11,9 @@ dotenv.config();
 
 const app = express();
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const bot = new Telegraf(TOKEN);
+const bot = new Telegraf(TOKEN, {
+    telegram: { webhookReply:  true }
+});
 const USERID = process.env.USERID;
 
 // Create scenes for the conversation
