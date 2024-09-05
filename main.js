@@ -16,15 +16,6 @@ const bot = new Telegraf(TOKEN, {
 });
 const USERID = process.env.USERID;
 
-const WEBHOOK_PATH = `/telegraf/${TOKEN}`;
-const WEBHOOK_URL = `https://jobs-bot-js.onrender.com${WEBHOOK_PATH}`;
-
-// Set the webhook when the app starts
-bot.telegram.setWebhook(WEBHOOK_URL);
-
-// Use Express to handle webhook requests
-app.use(bot.webhookCallback(WEBHOOK_PATH));
-
 // Create scenes for the conversation
 const choiceScene = new Scenes.BaseScene('CHOICE_SCENE');
 choiceScene.enter(async (ctx) => {
@@ -149,6 +140,15 @@ bot.catch((err, ctx) => {
 app.get('/', (req, res) => {
     res.json({ message: "Hello, welcome to the Jobs-Bot by t.me/Leviticus_98!" });
 });
+
+// Webhook handler route
+bot.telegram.setWebhook('https://jobs-bot-js.onrender.com')
+    .then(() => {
+        console.log('Webhook set!');
+    })
+    .catch((error) => {
+        console.error('Error setting webhook:', error);
+    });
 
 app.listen(8000, () => {
     console.log('Express server running on port 8000');
