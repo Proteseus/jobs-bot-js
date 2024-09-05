@@ -16,6 +16,15 @@ const bot = new Telegraf(TOKEN, {
 });
 const USERID = process.env.USERID;
 
+const WEBHOOK_PATH = `/telegraf/${TOKEN}`;
+const WEBHOOK_URL = `https://jobs-bot-js.onrender.com${WEBHOOK_PATH}`;
+
+// Set the webhook when the app starts
+bot.telegram.setWebhook(WEBHOOK_URL);
+
+// Use Express to handle webhook requests
+app.use(bot.webhookCallback(WEBHOOK_PATH));
+
 // Create scenes for the conversation
 const choiceScene = new Scenes.BaseScene('CHOICE_SCENE');
 choiceScene.enter(async (ctx) => {
@@ -139,17 +148,6 @@ bot.catch((err, ctx) => {
 // Start Express server
 app.get('/', (req, res) => {
     res.json({ message: "Hello, welcome to the Jobs-Bot by t.me/Leviticus_98!" });
-});
-
-// Webhook handler route
-app.post('/', (req, res) => {
-    // Handle the incoming update with Telegraf
-    bot.handleUpdate(req.body)
-        .then(() => res.sendStatus(200))  // Send OK status on success
-        .catch((err) => {
-            console.error('Error handling update:', err);
-            res.sendStatus(500); // Internal Server Error on failure
-        });
 });
 
 app.listen(8000, () => {
