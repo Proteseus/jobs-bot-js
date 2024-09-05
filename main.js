@@ -141,15 +141,6 @@ app.get('/', (req, res) => {
     res.json({ message: "Hello, welcome to the Jobs-Bot by t.me/Leviticus_98!" });
 });
 
-// Webhook handler route
-bot.telegram.setWebhook('https://jobs-bot-js.onrender.com')
-    .then(() => {
-        console.log('Webhook set!');
-    })
-    .catch((error) => {
-        console.error('Error setting webhook:', error);
-    });
-
 app.listen(8000, () => {
     console.log('Express server running on port 8000');
 });
