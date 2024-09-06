@@ -11,10 +11,11 @@ dotenv.config();
 
 const app = express();
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const bot = new Telegraf(TOKEN, {
-    telegram: { webhookReply:  true }
-});
+const bot = new Telegraf(TOKEN);
 const USERID = process.env.USERID;
+
+// Start Express server
+app.use(await bot.createWebhook({ domain: 'https://jobs-bot-js.onrender.com' }))
 
 // Create scenes for the conversation
 const choiceScene = new Scenes.BaseScene('CHOICE_SCENE');
@@ -136,10 +137,7 @@ bot.catch((err, ctx) => {
     ctx.reply('Sorry, an error occurred. Please try again.');
 });
 
-// Start Express server
-app.use(await bot.createWebhook({ domain: 'https://jobs-bot-js.onrender.com' }))
-
-app.get('/', (req, res) => {
+app.get('/health', (req, res) => {
     res.json({ message: "Hello, welcome to the Jobs-Bot by t.me/Leviticus_98!" });
 });
 
