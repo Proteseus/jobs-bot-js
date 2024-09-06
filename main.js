@@ -15,7 +15,7 @@ const bot = new Telegraf(TOKEN);
 const USERID = process.env.USERID;
 
 // Start Express server
-app.use(await bot.createWebhook({ domain: 'https://jobs-bot-js.onrender.com' }))
+app.use(await bot.createWebhook({ domain: 'https://jobs-bot-js.onrender.com' }));
 
 // Create scenes for the conversation
 const choiceScene = new Scenes.BaseScene('CHOICE_SCENE');
@@ -79,7 +79,7 @@ bot.use((ctx, next) => {
     if(!ctx.session.messageId) {
         ctx.session.messageId = null;
     }
-})
+});
 
 // Define bot commands based on user role
 bot.start((ctx) => {
@@ -141,8 +141,8 @@ app.get('/health', (req, res) => {
     res.json({ message: "Hello, welcome to the Jobs-Bot by t.me/Leviticus_98!" });
 });
 
-app.listen(8000, () => {
-    console.log('Express server running on port 8000');
+app.listen(3000, () => {
+    console.log('Express server running on port 3000');
 });
 
 // Start the bot for local
